@@ -9,17 +9,17 @@ import (
 const MemberTableName = "member"
 
 type Member struct {
-	Id           int64     `gorm:"primary_key;not null;auto_increment"`
-	Code         string    `gorm:"type:varchar(255);not null;default:''"`
-	Name         string    `gorm:"type:varchar(255);not null;default:''"`
-	DepartmentId int64     `gorm:"type:bigint(20) unsigned;not null;default:0"`
-	CreateTime   time.Time `gorm:"type:datetime;not null;default:CURRENT_TIMESTAMP"`
-	UpdateTime   time.Time `gorm:"type:datetime;not null;default:CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"`
+	Id             int64     `gorm:"primary_key;not null;auto_increment"`
+	Code           string    `gorm:"type:varchar(255);not null;default:''"`
+	Name           string    `gorm:"type:varchar(255);not null;default:''"`
+	DepartmentCode string    `gorm:"type:varchar(255);not null;default:''"`
+	CreateTime     time.Time `gorm:"type:datetime;not null;default:CURRENT_TIMESTAMP"`
+	UpdateTime     time.Time `gorm:"type:datetime;not null;default:CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"`
 }
 
-func InsertMember(db *gorm.DB, code, name string, departmentId int64) error {
+func InsertMember(db *gorm.DB, code, name string, departmentCode string) error {
 	// 查询部门是否存在
-	ret, err := GetDepartmentById(db, []int64{departmentId})
+	ret, err := GetDepartmentByCode(db, []string{departmentCode})
 	if err != nil {
 		return err
 	}
@@ -28,11 +28,11 @@ func InsertMember(db *gorm.DB, code, name string, departmentId int64) error {
 	}
 
 	mem := &Member{
-		Code:         code,
-		Name:         name,
-		DepartmentId: departmentId,
-		CreateTime:   time.Now(),
-		UpdateTime:   time.Now(),
+		Code:           code,
+		Name:           name,
+		DepartmentCode: departmentCode,
+		CreateTime:     time.Now(),
+		UpdateTime:     time.Now(),
 	}
 	err = db.Table(MemberTableName).Create(mem).Error
 	if err != nil {
@@ -41,8 +41,8 @@ func InsertMember(db *gorm.DB, code, name string, departmentId int64) error {
 	return nil
 }
 
-func DeleteMember(db *gorm.DB, id int64) error {
-	return db.Table(MemberTableName).Delete(&Member{}, "id = ?", id).Error
+func DeleteMember(db *gorm.DB, code string) error {
+	return db.Table(MemberTableName).Delete(&Member{}, "code = ?", code).Error
 }
 
 func QueryMember(db *gorm.DB, mem *Member, page, pageSize int64) ([]*Member, int64, error) {
@@ -59,9 +59,9 @@ func QueryMember(db *gorm.DB, mem *Member, page, pageSize int64) ([]*Member, int
 	return retDept, totalCnt, nil
 }
 
-func GetMemberById(db *gorm.DB, ids []int64) ([]*Member, error) {
+func GetMemberByCode(db *gorm.DB, codes []string) ([]*Member, error) {
 	ret := make([]*Member, 0)
-	err := db.Where("id in (?)", ids).Find(&ret).Error
+	err := db.Where("code in (?)", codes).Find(&ret).Error
 	if err != nil {
 		return nil, err
 	}

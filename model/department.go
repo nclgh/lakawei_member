@@ -3,6 +3,7 @@ package model
 import (
 	"time"
 	"github.com/jinzhu/gorm"
+	"fmt"
 )
 
 const DepartmentTableName = "department"
@@ -29,8 +30,18 @@ func InsertDepartment(db *gorm.DB, code, name string) error {
 	return nil
 }
 
-func DeleteDepartment(db *gorm.DB, id int64) error {
-	return db.Table(DepartmentTableName).Delete(&Department{}, "id = ?", id).Error
+func DeleteDepartment(db *gorm.DB, code string) error {
+	// 查询部门人员是否存在
+	_, cnt, err := QueryMember(db, &Member{
+		DepartmentCode: code,
+	}, 0, 1)
+	if err != nil {
+		return err
+	}
+	if cnt > 0 {
+		return fmt.Errorf("still exist member in this department")
+	}
+	return db.Table(DepartmentTableName).Delete(&Department{}, "code = ?", code).Error
 }
 
 func QueryDepartment(db *gorm.DB, dept *Department, page, pageSize int64) ([]*Department, int64, error) {
@@ -47,9 +58,9 @@ func QueryDepartment(db *gorm.DB, dept *Department, page, pageSize int64) ([]*De
 	return retDept, totalCnt, nil
 }
 
-func GetDepartmentById(db *gorm.DB, ids []int64) ([]*Department, error) {
+func GetDepartmentByCode(db *gorm.DB, codes []string) ([]*Department, error) {
 	retDept := make([]*Department, 0)
-	err := db.Where("id in (?)", ids).Find(&retDept).Error
+	err := db.Where("code in (?)", codes).Find(&retDept).Error
 	if err != nil {
 		return nil, err
 	}

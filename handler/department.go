@@ -11,23 +11,21 @@ import (
 
 func tranDepartment(md *model.Department) *member.Department {
 	return &member.Department{
-		Id:   md.Id,
 		Code: md.Code,
 		Name: md.Name,
 	}
 }
 
-func batchTranDepartment(mds []*model.Department) map[int64]*member.Department {
-	ret := make(map[int64]*member.Department)
+func batchTranDepartment(mds []*model.Department) map[string]*member.Department {
+	ret := make(map[string]*member.Department)
 	for _, v := range mds {
-		ret[v.Id] = tranDepartment(v)
+		ret[v.Code] = tranDepartment(v)
 	}
 	return ret
 }
 
 func rTranDepartment(d *member.Department) *model.Department {
 	return &model.Department{
-		Id:   d.Id,
 		Code: d.Code,
 		Name: d.Name,
 	}
@@ -59,7 +57,7 @@ func DeleteDepartment(req *member.DeleteDepartmentRequest) (rsp *member.DeleteDe
 		logrus.Errorf("DeleteDepartment panic: %v, stack: %v", err, stacks)
 		rsp = getDeleteDepartmentResponse(common.CodeFailed, "panic")
 	})
-	err := model.DeleteDepartment(model.GetLakaweiDb(), req.Id)
+	err := model.DeleteDepartment(model.GetLakaweiDb(), req.Code)
 	if err != nil {
 		logrus.Errorf("delete department from mysql failed. err: %v", err)
 		return getDeleteDepartmentResponse(common.CodeFailed, fmt.Sprintf("err: %v", err))
@@ -75,23 +73,23 @@ func getDeleteDepartmentResponse(code common.RspCode, msg string) *member.Delete
 	return rsp
 }
 
-func GetDepartmentById(req *member.GetDepartmentByIdRequest) (rsp *member.GetDepartmentByIdResponse) {
+func GetDepartmentByCode(req *member.GetDepartmentByCodeRequest) (rsp *member.GetDepartmentByCodeResponse) {
 	defer utils.RecoverPanic(func(err interface{}, stacks string) {
-		logrus.Errorf("GetDepartmentById panic: %v, stack: %v", err, stacks)
-		rsp = getGetDepartmentByIdResponse(common.CodeFailed, "panic")
+		logrus.Errorf("GetDepartmentByCode panic: %v, stack: %v", err, stacks)
+		rsp = getGetDepartmentByCodeResponse(common.CodeFailed, "panic")
 	})
-	ret, err := model.GetDepartmentById(model.GetLakaweiDb(), req.Ids)
+	ret, err := model.GetDepartmentByCode(model.GetLakaweiDb(), req.Codes)
 	if err != nil {
 		logrus.Errorf("select department from mysql failed. err: %v", err)
-		return getGetDepartmentByIdResponse(common.CodeFailed, fmt.Sprintf("err: %v", err))
+		return getGetDepartmentByCodeResponse(common.CodeFailed, fmt.Sprintf("err: %v", err))
 	}
-	rsp = getGetDepartmentByIdResponse(common.CodeSuccess, "")
+	rsp = getGetDepartmentByCodeResponse(common.CodeSuccess, "")
 	rsp.Departments = batchTranDepartment(ret)
 	return rsp
 }
 
-func getGetDepartmentByIdResponse(code common.RspCode, msg string) *member.GetDepartmentByIdResponse {
-	rsp := &member.GetDepartmentByIdResponse{
+func getGetDepartmentByCodeResponse(code common.RspCode, msg string) *member.GetDepartmentByCodeResponse {
+	rsp := &member.GetDepartmentByCodeResponse{
 		Code: code,
 		Msg:  msg,
 	}

@@ -26,8 +26,8 @@ func (server *ServiceMember) DeleteDepartment(req member.DeleteDepartmentRequest
 	return nil
 }
 
-func (server *ServiceMember) GetDepartmentById(req member.GetDepartmentByIdRequest, res *member.GetDepartmentByIdResponse) error {
-	resp := handler.GetDepartmentById(&req)
+func (server *ServiceMember) GetDepartmentByCode(req member.GetDepartmentByCodeRequest, res *member.GetDepartmentByCodeResponse) error {
+	resp := handler.GetDepartmentByCode(&req)
 	*res = *resp
 	return nil
 }
@@ -50,8 +50,8 @@ func (server *ServiceMember) DeleteMember(req member.DeleteMemberRequest, res *m
 	return nil
 }
 
-func (server *ServiceMember) GetMemberById(req member.GetMemberByIdRequest, res *member.GetMemberByIdResponse) error {
-	resp := handler.GetMemberById(&req)
+func (server *ServiceMember) GetMemberByCode(req member.GetMemberByCodeRequest, res *member.GetMemberByCodeResponse) error {
+	resp := handler.GetMemberByCode(&req)
 	*res = *resp
 	return nil
 }
