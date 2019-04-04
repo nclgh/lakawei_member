@@ -26,12 +26,12 @@
   version = "v6.15.2"
 
 [[projects]]
-  digest = "1:ec6f9bf5e274c833c911923c9193867f3f18788c461f76f05f62bb1510e0ae65"
+  digest = "1:850c49ca338a10fec2cb9e78f793043ed23965489d09e30bcc19fe29719da313"
   name = "github.com/go-sql-driver/mysql"
   packages = ["."]
   pruneopts = "UT"
-  revision = "72cd26f257d44c1114970e19afddcd812016007e"
-  version = "v1.4.1"
+  revision = "a0583e0143b1624142adab07e0e97fe106d99561"
+  version = "v1.3.0"
 
 [[projects]]
   digest = "1:0f65b10afa740ebce239838198b7647ca95c6395738bbaec5748aceece17b07c"
@@ -70,7 +70,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:2a10cc5809db92f5a96ad0d0effa12ff7012ec71f34c656148f4e2a84dbe32a2"
+  digest = "1:84c91b357f3f1f83258dd6b2ce7ecca78b3c09268ebbbbaab49bee4465641d15"
   name = "github.com/nclgh/lakawei_discover"
   packages = [
     ".",
@@ -78,7 +78,7 @@
     "helper",
   ]
   pruneopts = "UT"
-  revision = "6ad64eabb86576855518e08cfb49f25744982816"
+  revision = "3e81c60a51f4a6c81901c7aada903a12dfb59eec"
 
 [[projects]]
   branch = "master"
@@ -136,14 +136,6 @@
   ]
   pruneopts = "UT"
   revision = "f49334f85ddcf0f08d7fb6dd7363e9e6d6b777eb"
-
-[[projects]]
-  digest = "1:c25289f43ac4a68d88b02245742347c94f1e108c534dda442188015ff80669b3"
-  name = "google.golang.org/appengine"
-  packages = ["cloudsql"]
-  pruneopts = "UT"
-  revision = "54a98f90d1c46b7731eb8fb305d2a321c30ef610"
-  version = "v1.5.0"
 
 [[projects]]
   digest = "1:4d2e5a73dc1500038e504a8d78b986630e3626dc027bc030ba5c75da257cdb96"
